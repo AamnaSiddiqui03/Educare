@@ -11,56 +11,66 @@ GET
 Get user details (role-based response)
 
 
+
 Phase 2:
-2.Student Profile API (Students Table)
+2. Student Profile API (Phase 1)
+Endpoint	Method	Description
+/students/:id/profile	POST	Create student profile after registration
+/students/:id/profile	GET	Fetch student profile
+/students/:id/profile	PUT	Update student profile (phone, address, photo, video, help_text)
+/students/:id/profile	DELETE	Delete student profile
+/students/:id/profile/submit	POST	Mark Phase 1 complete (profile_completed = true)
+/students/:id/profile/progress	GET	Fetch Phase 1 + Phase 2 completion status
+3. Student Education API
+Endpoint	Method	Description
+/students/:id/education	GET	List all education entries for student
+/students/:id/education	POST	Add a new education entry
+/students/:id/education/:education_id	GET	Fetch specific education entry
+/students/:id/education/:education_id	PUT	Update specific education entry
+/students/:id/education/:education_id	DELETE	Delete specific education entry
+4. AssessmentMaster API (Admin / Metadata)
+Endpoint	Method	Description
+/assessments	POST	Create a new test
+/assessments	GET	List all tests
+/assessments/:id	GET	Fetch test details
+/assessments/:id	PUT	Update test info
+/assessments/:id	DELETE	Delete test
+5. StudentAssessment API (Phase 2)
 Endpoint	Method	Description	Notes
-/students/:id/profile	POST	Create student profile after registration	payload: phone, address, photo_url, video_url, help_text
-/students/:id/profile	GET	Fetch student profile	used in portal for display
-/students/:id/profile	PUT	Update student profile	phone, address, photo/video, help_text
-/students/:id/profile	DELETE	Delete student profile	admin/internal use
-/students/:id/profile/submit	POST	Mark profile completed (profile_completed = true)	triggers Phase 2 in portal
-/students/:id/profile/progress	GET	Fetch profile + assessment completion status	returns profile_completed + assessment_completed for frontend tracker
-3. Student Education API (StudentEducation Table)
-Endpoint	Method	Description	Notes
-/students/:id/education	GET	List all education entries for a student	
-/students/:id/education	POST	Add new education entry	payload: institution_name, education_level, year_of_passing, marks_obtained, report_card_url
-/students/:id/education/:education_id	GET	Fetch specific education entry	
-/students/:id/education/:education_id	PUT	Update specific education entry	
-/students/:id/education/:education_id	DELETE	Delete specific education entry	
+/students/:id/assessments/available	GET	List available tests for student based on education_level and refresh interval	Backend filters tests student can currently attempt
+/students/:id/assessments/:assessment_id/submit	POST	Submit answers → generate PDF → store a new row in StudentAssessment	Multiple submissions allowed; each creates a new row
+/students/:id/assessments/:assessment_id/latest	GET	Fetch latest submission for a test	Only latest counts for reporting/visibility
+/students/:id/assessments/:assessment_id/history	GET	Fetch all submissions for a test	Optional, for student review
+/students/:id/assessments/:student_assessment_id/report	GET	Download PDF report for a submission	
+6. Workflow Notes
 
-Sample Education Payload:
+Phase 1 (Profile Completion)
 
-{
-  "institution_name": "New Middle East International School",
-  "education_level": "Class 10",
-  "year_of_passing": 2019,
-  "marks_obtained": 91.6,
-  "report_card_url": "https://storage.example.com/report_card.pdf"
-}
+/students/:id/profile/submit → marks profile_completed = true
 
-4. Student Assessment API (StudentAssessment Table)
-Endpoint	Method	Description	Notes
-/students/:id/assessment/start	GET	Fetch assessment questions (external JSON)	backend returns questions for frontend
-/students/:id/assessment/submit	POST	Submit answers → generate PDF → save in StudentAssessment → mark assessment_completed = true	payload: answers JSON
-/students/:id/assessment/report	GET	Download PDF report	backend retrieves report_pdf_url from StudentAssessment table
-/students/:id/assessment/:assessment_id	GET	Fetch specific assessment record	optional, internal/admin use
-/students/:id/assessment/:assessment_id	DELETE	Delete assessment record	internal/admin use
+Phase 2 (Assessments)
 
-Sample Assessment Submission Payload:
+/students/:id/assessments/available → shows tests eligible for attempt
 
-{
-  "answers": {
-    "q1": "B",
-    "q2": "A"
-  }
-}
+/students/:id/assessments/:assessment_id/submit → stores a new submission
 
+/students/:id/assessments/:assessment_id/latest → determines current report/score for profile visibility
 
-Sample Response:
+Refresh logic
 
-{
-  "assessment_id": "123e4567-e89b-12d3-a456-426614174000",
-  "assessment_completed": true,
-  "report_pdf_url": "https://storage.example.com/assessment_123.pdf",
-  "message": "Assessment submitted successfully. Profile is now visible to donors."
-}
+Backend calculates next_available_date = last_submission.submitted_at + refresh_interval_days
+
+Only allows submission if the date has passed
+
+This API list fully supports your flow:
+
+Phase 1: student profile + education
+
+Phase 2: multiple assessments per grade, weekly refresh, historical submissions stored, only latest counts
+
+PDF reports stored per submission
+
+If you want, I can now draw a complete visual diagram showing:
+Students → Education → Assessments → Submissions + Phase tracking + API endpoints
+
+This will make it fully dev-ready.
