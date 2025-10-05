@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from typing import Optional
+from typing import Optional, List
 
 from app.data.models import User
 from app.services.auth_service import AuthService
@@ -18,6 +18,11 @@ class UserService:
     def get_user_by_email(db: Session, email: str) -> Optional[User]:
         """Get user by email"""
         return db.query(User).filter(User.email == email).first()
+    
+    @staticmethod
+    def get_all_users(db: Session) -> List[User]:
+        """Get all users"""
+        return db.query(User).all()
     
     @staticmethod
     def create_user(db: Session, name: str, email: str, password: str, role: str) -> User:

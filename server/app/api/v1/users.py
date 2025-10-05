@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import Union
+from typing import Union, List
 
 from app.data.db import get_db
 from app.data.schema import UserDetailResponse, TokenData
@@ -8,6 +8,31 @@ from app.services.user_service import UserService
 from app.core.deps import get_current_active_user
 
 router = APIRouter()
+
+
+@router.get("/", response_model=List[UserDetailResponse])
+async def get_all_users(
+    db: Session = Depends(get_db)
+):
+    """
+    Get all users
+    
+    Returns a list of all users in the system.
+    No authentication required.
+    """
+    users = UserService.get_all_users(db)
+    
+    return [
+        UserDetailResponse(
+            id=str(user.id),
+            name=user.name,
+            email=user.email,
+            role=user.role,
+            verified=user.verified,
+            created_at=user.created_at.isoformat()
+        )
+        for user in users
+    ]
 
 
 @router.get("/me", response_model=UserDetailResponse)

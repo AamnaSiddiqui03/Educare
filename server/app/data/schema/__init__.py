@@ -19,6 +19,31 @@ from .auth_schema import (
     LogoutResponse
 )
 
+from .student_schema import (
+    StudentProfileCreate,
+    StudentProfileUpdate,
+    StudentProfileResponse,
+    StudentProgressResponse,
+    EducationCreate,
+    EducationUpdate,
+    EducationResponse,
+    StudentBaseResponse,
+    StudentErrorResponse
+)
+
+from .assessment_schema import (
+    AssessmentMasterResponse,
+    AssessmentStartResponse,
+    AssessmentSubmitRequest,
+    AssessmentSubmitResponse,
+    AssessmentReportResponse,
+    StudentAssessmentHistoryResponse,
+    AvailableAssessmentResponse,
+    AssessmentStatusResponse,
+    AssessmentBaseResponse,
+    AssessmentErrorResponse
+)
+
 __all__ = [
     # User schemas
     "UserResponse",
@@ -37,5 +62,28 @@ __all__ = [
     "PasswordChangeRequest",
     "TokenResponse",
     "LoginResponse",
-    "LogoutResponse"
+    "LogoutResponse",
+    
+    # Student schemas
+    "StudentProfileCreate",
+    "StudentProfileUpdate", 
+    "StudentProfileResponse",
+    "StudentProgressResponse",
+    "EducationCreate",
+    "EducationUpdate",
+    "EducationResponse",
+    "StudentBaseResponse",
+    "StudentErrorResponse",
+    
+    # Assessment schemas
+    "AssessmentMasterResponse",
+    "AssessmentStartResponse",
+    "AssessmentSubmitRequest",
+    "AssessmentSubmitResponse",
+    "AssessmentReportResponse",
+    "StudentAssessmentHistoryResponse",
+    "AvailableAssessmentResponse",
+    "AssessmentStatusResponse",
+    "AssessmentBaseResponse",
+    "AssessmentErrorResponse"
 ]
