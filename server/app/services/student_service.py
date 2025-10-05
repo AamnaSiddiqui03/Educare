@@ -27,7 +27,23 @@ class StudentService:
         address: str, 
         help_text: str,
         photo_url: Optional[str] = None,
-        video_url: Optional[str] = None
+        video_url: Optional[str] = None,
+        # Personal Information
+        gender: Optional[str] = None,
+        age: Optional[int] = None,
+        # Parent/Guardian Information
+        parent_guardian_occupation: Optional[str] = None,
+        parent_guardian_monthly_income: Optional[int] = None,
+        parents_education_status: Optional[str] = None,
+        parent_live_status: Optional[str] = None,
+        # Scholarship Information
+        scholarship_amount_requested: Optional[int] = None,
+        is_eligible_for_zakat: Optional[bool] = None,
+        # Applicant Information
+        applicant_email: Optional[str] = None,
+        applicant_type: Optional[str] = None,
+        applicant_name: Optional[str] = None,
+        applicant_mobile_number: Optional[str] = None
     ) -> Student:
         """Create a new student profile"""
         # Check if user exists and is a student
@@ -53,7 +69,23 @@ class StudentService:
             address=address,
             help_text=help_text,
             photo_url=photo_url,
-            video_url=video_url
+            video_url=video_url,
+            # Personal Information
+            gender=gender.value if gender else None,
+            age=age,
+            # Parent/Guardian Information
+            parent_guardian_occupation=parent_guardian_occupation,
+            parent_guardian_monthly_income=parent_guardian_monthly_income,
+            parents_education_status=parents_education_status,
+            parent_live_status=parent_live_status.value if parent_live_status else None,
+            # Scholarship Information
+            scholarship_amount_requested=scholarship_amount_requested,
+            is_eligible_for_zakat=is_eligible_for_zakat,
+            # Applicant Information
+            applicant_email=applicant_email,
+            applicant_type=applicant_type.value if applicant_type else None,
+            applicant_name=applicant_name,
+            applicant_mobile_number=applicant_mobile_number
         )
         
         db.add(student)
@@ -69,7 +101,23 @@ class StudentService:
         address: Optional[str] = None,
         help_text: Optional[str] = None,
         photo_url: Optional[str] = None,
-        video_url: Optional[str] = None
+        video_url: Optional[str] = None,
+        # Personal Information
+        gender: Optional[str] = None,
+        age: Optional[int] = None,
+        # Parent/Guardian Information
+        parent_guardian_occupation: Optional[str] = None,
+        parent_guardian_monthly_income: Optional[int] = None,
+        parents_education_status: Optional[str] = None,
+        parent_live_status: Optional[str] = None,
+        # Scholarship Information
+        scholarship_amount_requested: Optional[int] = None,
+        is_eligible_for_zakat: Optional[bool] = None,
+        # Applicant Information
+        applicant_email: Optional[str] = None,
+        applicant_type: Optional[str] = None,
+        applicant_name: Optional[str] = None,
+        applicant_mobile_number: Optional[str] = None
     ) -> Student:
         """Update student profile"""
         student = StudentService.get_student_by_id(db, student_id)
@@ -90,6 +138,38 @@ class StudentService:
             student.photo_url = photo_url
         if video_url is not None:
             student.video_url = video_url
+        
+        # Personal Information
+        if gender is not None:
+            student.gender = gender.value if hasattr(gender, 'value') else gender
+        if age is not None:
+            student.age = age
+        
+        # Parent/Guardian Information
+        if parent_guardian_occupation is not None:
+            student.parent_guardian_occupation = parent_guardian_occupation
+        if parent_guardian_monthly_income is not None:
+            student.parent_guardian_monthly_income = parent_guardian_monthly_income
+        if parents_education_status is not None:
+            student.parents_education_status = parents_education_status
+        if parent_live_status is not None:
+            student.parent_live_status = parent_live_status.value if hasattr(parent_live_status, 'value') else parent_live_status
+        
+        # Scholarship Information
+        if scholarship_amount_requested is not None:
+            student.scholarship_amount_requested = scholarship_amount_requested
+        if is_eligible_for_zakat is not None:
+            student.is_eligible_for_zakat = is_eligible_for_zakat
+        
+        # Applicant Information
+        if applicant_email is not None:
+            student.applicant_email = applicant_email
+        if applicant_type is not None:
+            student.applicant_type = applicant_type.value if hasattr(applicant_type, 'value') else applicant_type
+        if applicant_name is not None:
+            student.applicant_name = applicant_name
+        if applicant_mobile_number is not None:
+            student.applicant_mobile_number = applicant_mobile_number
         
         db.commit()
         db.refresh(student)

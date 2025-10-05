@@ -6,11 +6,9 @@ from app.data.schema import (
     StudentProfileCreate,
     StudentProfileUpdate,
     StudentProfileResponse,
-    StudentProgressResponse,
-    TokenData
+    StudentProgressResponse
 )
 from app.services.student_service import StudentService
-from app.core.deps import get_current_active_user
 
 router = APIRouter()
 
@@ -19,7 +17,6 @@ router = APIRouter()
 async def create_student_profile(
     user_id: str,
     profile_data: StudentProfileCreate,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -31,12 +28,6 @@ async def create_student_profile(
     - **video_url**: Optional video introduction URL
     - **help_text**: Text describing kind of help student is seeking
     """
-    # Check if user is trying to create their own profile
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only create your own student profile"
-        )
     
     try:
         student = StudentService.create_student_profile(
@@ -46,7 +37,23 @@ async def create_student_profile(
             address=profile_data.address,
             help_text=profile_data.help_text,
             photo_url=profile_data.photo_url,
-            video_url=profile_data.video_url
+            video_url=profile_data.video_url,
+            # Personal Information
+            gender=profile_data.gender,
+            age=profile_data.age,
+            # Parent/Guardian Information
+            parent_guardian_occupation=profile_data.parent_guardian_occupation,
+            parent_guardian_monthly_income=profile_data.parent_guardian_monthly_income,
+            parents_education_status=profile_data.parents_education_status,
+            parent_live_status=profile_data.parent_live_status,
+            # Scholarship Information
+            scholarship_amount_requested=profile_data.scholarship_amount_requested,
+            is_eligible_for_zakat=profile_data.is_eligible_for_zakat,
+            # Applicant Information
+            applicant_email=profile_data.applicant_email,
+            applicant_type=profile_data.applicant_type,
+            applicant_name=profile_data.applicant_name,
+            applicant_mobile_number=profile_data.applicant_mobile_number
         )
         
         return StudentProfileResponse(
@@ -57,6 +64,23 @@ async def create_student_profile(
             photo_url=student.photo_url,
             video_url=student.video_url,
             help_text=student.help_text,
+            # Personal Information
+            gender=student.gender,
+            age=student.age,
+            # Parent/Guardian Information
+            parent_guardian_occupation=student.parent_guardian_occupation,
+            parent_guardian_monthly_income=student.parent_guardian_monthly_income,
+            parents_education_status=student.parents_education_status,
+            parent_live_status=student.parent_live_status,
+            # Scholarship Information
+            scholarship_amount_requested=student.scholarship_amount_requested,
+            is_eligible_for_zakat=student.is_eligible_for_zakat,
+            # Applicant Information
+            applicant_email=student.applicant_email,
+            applicant_type=student.applicant_type,
+            applicant_name=student.applicant_name,
+            applicant_mobile_number=student.applicant_mobile_number,
+            # Status Fields
             profile_completed=student.profile_completed,
             assessment_completed=student.assessment_completed,
             created_at=student.created_at.isoformat(),
@@ -75,7 +99,6 @@ async def create_student_profile(
 @router.get("/{user_id}/profile", response_model=StudentProfileResponse)
 async def get_student_profile(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -83,12 +106,6 @@ async def get_student_profile(
     
     Returns the student's profile information
     """
-    # Check if user is trying to access their own profile
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only access your own student profile"
-        )
     
     student = StudentService.get_student_by_user_id(db, user_id)
     if not student:
@@ -105,6 +122,23 @@ async def get_student_profile(
         photo_url=student.photo_url,
         video_url=student.video_url,
         help_text=student.help_text,
+        # Personal Information
+        gender=student.gender,
+        age=student.age,
+        # Parent/Guardian Information
+        parent_guardian_occupation=student.parent_guardian_occupation,
+        parent_guardian_monthly_income=student.parent_guardian_monthly_income,
+        parents_education_status=student.parents_education_status,
+        parent_live_status=student.parent_live_status,
+        # Scholarship Information
+        scholarship_amount_requested=student.scholarship_amount_requested,
+        is_eligible_for_zakat=student.is_eligible_for_zakat,
+        # Applicant Information
+        applicant_email=student.applicant_email,
+        applicant_type=student.applicant_type,
+        applicant_name=student.applicant_name,
+        applicant_mobile_number=student.applicant_mobile_number,
+        # Status Fields
         profile_completed=student.profile_completed,
         assessment_completed=student.assessment_completed,
         created_at=student.created_at.isoformat(),
@@ -116,7 +150,6 @@ async def get_student_profile(
 async def update_student_profile(
     user_id: str,
     profile_data: StudentProfileUpdate,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -124,12 +157,6 @@ async def update_student_profile(
     
     Updates the student's profile information with provided fields
     """
-    # Check if user is trying to update their own profile
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only update your own student profile"
-        )
     
     student = StudentService.get_student_by_user_id(db, user_id)
     if not student:
@@ -146,7 +173,23 @@ async def update_student_profile(
             address=profile_data.address,
             help_text=profile_data.help_text,
             photo_url=profile_data.photo_url,
-            video_url=profile_data.video_url
+            video_url=profile_data.video_url,
+            # Personal Information
+            gender=profile_data.gender,
+            age=profile_data.age,
+            # Parent/Guardian Information
+            parent_guardian_occupation=profile_data.parent_guardian_occupation,
+            parent_guardian_monthly_income=profile_data.parent_guardian_monthly_income,
+            parents_education_status=profile_data.parents_education_status,
+            parent_live_status=profile_data.parent_live_status,
+            # Scholarship Information
+            scholarship_amount_requested=profile_data.scholarship_amount_requested,
+            is_eligible_for_zakat=profile_data.is_eligible_for_zakat,
+            # Applicant Information
+            applicant_email=profile_data.applicant_email,
+            applicant_type=profile_data.applicant_type,
+            applicant_name=profile_data.applicant_name,
+            applicant_mobile_number=profile_data.applicant_mobile_number
         )
         
         return StudentProfileResponse(
@@ -157,6 +200,23 @@ async def update_student_profile(
             photo_url=updated_student.photo_url,
             video_url=updated_student.video_url,
             help_text=updated_student.help_text,
+            # Personal Information
+            gender=updated_student.gender,
+            age=updated_student.age,
+            # Parent/Guardian Information
+            parent_guardian_occupation=updated_student.parent_guardian_occupation,
+            parent_guardian_monthly_income=updated_student.parent_guardian_monthly_income,
+            parents_education_status=updated_student.parents_education_status,
+            parent_live_status=updated_student.parent_live_status,
+            # Scholarship Information
+            scholarship_amount_requested=updated_student.scholarship_amount_requested,
+            is_eligible_for_zakat=updated_student.is_eligible_for_zakat,
+            # Applicant Information
+            applicant_email=updated_student.applicant_email,
+            applicant_type=updated_student.applicant_type,
+            applicant_name=updated_student.applicant_name,
+            applicant_mobile_number=updated_student.applicant_mobile_number,
+            # Status Fields
             profile_completed=updated_student.profile_completed,
             assessment_completed=updated_student.assessment_completed,
             created_at=updated_student.created_at.isoformat(),
@@ -175,7 +235,6 @@ async def update_student_profile(
 @router.post("/{user_id}/profile/submit", response_model=StudentProgressResponse)
 async def submit_student_profile(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -183,12 +242,6 @@ async def submit_student_profile(
     
     Triggers Phase 2 in portal
     """
-    # Check if user is trying to submit their own profile
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only submit your own student profile"
-        )
     
     student = StudentService.get_student_by_user_id(db, user_id)
     if not student:
@@ -218,7 +271,6 @@ async def submit_student_profile(
 @router.get("/{user_id}/profile/progress", response_model=StudentProgressResponse)
 async def get_student_progress(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -226,12 +278,6 @@ async def get_student_progress(
     
     Returns profile_completed + assessment_completed for frontend tracker
     """
-    # Check if user is trying to access their own progress
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only access your own progress"
-        )
     
     student = StudentService.get_student_by_user_id(db, user_id)
     if not student:

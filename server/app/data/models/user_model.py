@@ -9,9 +9,10 @@ from app.data.db import Base
 
 class UserRole(str, Enum):
     """User role enumeration"""
-    STUDENT = "student"
-    DONOR = "donor"
-    MENTOR = "mentor"
+    STUDENT = "STUDENT"
+    DONOR = "DONOR"
+    MENTOR = "MENTOR"
+    ADMIN = "ADMIN"
 
 
 class User(Base):

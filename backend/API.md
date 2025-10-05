@@ -20,7 +20,7 @@ Register a new user in the system.
   "name": "John Doe",
   "email": "john@example.com",
   "password": "SecurePass123",
-  "role": "student"  // "student", "donor", or "mentor"
+  "role": "STUDENT"  // "STUDENT", "DONOR", "MENTOR", or "ADMIN"
 }
 ```
 
@@ -198,7 +198,27 @@ Authorization: Bearer <access_token>
   "address": "123 Main Street, City, State 12345",
   "photo_url": "https://example.com/photo.jpg",  // Optional
   "video_url": "https://example.com/video.mp4",  // Optional
-  "help_text": "I need help with career guidance and academic support."
+  "help_text": "I need help with career guidance and academic support.",
+  
+  // Personal Information (Optional)
+  "gender": "male",  // "male", "female", "other"
+  "age": 20,
+  
+  // Parent/Guardian Information (Optional)
+  "parent_guardian_occupation": "Teacher",
+  "parent_guardian_monthly_income": 25000,
+  "parents_education_status": "Graduate",
+  "parent_live_status": "both",  // "both", "one", "none"
+  
+  // Scholarship Information (Optional)
+  "scholarship_amount_requested": 50000,
+  "is_eligible_for_zakat": true,
+  
+  // Applicant Information (Optional)
+  "applicant_email": "parent@example.com",
+  "applicant_type": "parent",  // "student", "parent", "guardian"
+  "applicant_name": "John Doe Sr.",
+  "applicant_mobile_number": "9876543210"
 }
 ```
 
@@ -212,6 +232,18 @@ Authorization: Bearer <access_token>
   "photo_url": "https://example.com/photo.jpg",
   "video_url": "https://example.com/video.mp4",
   "help_text": "I need help with career guidance and academic support.",
+  "gender": "male",
+  "age": 20,
+  "parent_guardian_occupation": "Teacher",
+  "parent_guardian_monthly_income": 25000,
+  "parents_education_status": "Graduate",
+  "parent_live_status": "both",
+  "scholarship_amount_requested": 50000,
+  "is_eligible_for_zakat": true,
+  "applicant_email": "parent@example.com",
+  "applicant_type": "parent",
+  "applicant_name": "John Doe Sr.",
+  "applicant_mobile_number": "9876543210",
   "profile_completed": false,
   "assessment_completed": false,
   "created_at": "2025-01-04T12:00:00Z",
@@ -709,7 +741,7 @@ Authorization: Bearer <your-jwt-token>
 
 ## 📝 Notes for Frontend Development
 
-1. **User Roles**: The system supports three roles: `student`, `donor`, and `mentor`
+1. **User Roles**: The system supports four roles: `STUDENT`, `DONOR`, `MENTOR`, and `ADMIN`
 2. **UUIDs**: All IDs are UUID strings
 3. **Timestamps**: All timestamps are in ISO 8601 format
 4. **File URLs**: Photo, video, and report URLs should be stored as full URLs

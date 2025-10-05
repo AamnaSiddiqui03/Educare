@@ -6,11 +6,9 @@ from app.data.db import get_db
 from app.data.schema import (
     EducationCreate,
     EducationUpdate,
-    EducationResponse,
-    TokenData
+    EducationResponse
 )
 from app.services.student_service import StudentService
-from app.core.deps import get_current_active_user
 
 router = APIRouter()
 
@@ -18,7 +16,6 @@ router = APIRouter()
 @router.get("/{user_id}/education", response_model=List[EducationResponse])
 async def get_student_education(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -26,12 +23,6 @@ async def get_student_education(
     
     Returns list of all education entries for the student
     """
-    # Check if user is trying to access their own education
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only access your own education entries"
-        )
     
     try:
         # Get student to verify they exist
@@ -72,7 +63,6 @@ async def get_student_education(
 async def add_student_education(
     user_id: str,
     education_data: EducationCreate,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -84,12 +74,6 @@ async def add_student_education(
     - **marks_obtained**: Optional marks/percentage
     - **report_card_url**: Optional upload link
     """
-    # Check if user is trying to add to their own education
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only add education entries to your own profile"
-        )
     
     try:
         # Get student to verify they exist
@@ -135,7 +119,6 @@ async def add_student_education(
 async def get_specific_education(
     user_id: str,
     education_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -143,12 +126,6 @@ async def get_specific_education(
     
     Returns details of a specific education entry
     """
-    # Check if user is trying to access their own education
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only access your own education entries"
-        )
     
     try:
         # Get student to verify they exist
@@ -195,7 +172,6 @@ async def update_student_education(
     user_id: str,
     education_id: str,
     education_data: EducationUpdate,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -203,12 +179,6 @@ async def update_student_education(
     
     Updates the specified education entry with provided fields
     """
-    # Check if user is trying to update their own education
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only update your own education entries"
-        )
     
     try:
         # Get student to verify they exist
@@ -254,7 +224,6 @@ async def update_student_education(
 async def delete_student_education(
     user_id: str,
     education_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -262,12 +231,6 @@ async def delete_student_education(
     
     Removes the specified education entry from the student's profile
     """
-    # Check if user is trying to delete their own education
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only delete your own education entries"
-        )
     
     try:
         # Get student to verify they exist

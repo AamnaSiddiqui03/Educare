@@ -30,7 +30,7 @@ async def register_user(
     - **name**: User's full name
     - **email**: User's email address (must be unique)
     - **password**: User's password (minimum 8 characters)
-    - **role**: User's role (student, donor, or mentor)
+    - **role**: User's role (STUDENT, DONOR, MENTOR, or ADMIN)
     """
     try:
         user = UserService.create_user(

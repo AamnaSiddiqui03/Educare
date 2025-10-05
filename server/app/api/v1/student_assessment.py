@@ -10,12 +10,10 @@ from app.data.schema import (
     AssessmentReportResponse,
     StudentAssessmentHistoryResponse,
     AvailableAssessmentResponse,
-    AssessmentStatusResponse,
-    TokenData
+    AssessmentStatusResponse
 )
 from app.services.assessment_service import AssessmentService
 from app.services.student_service import StudentService
-from app.core.deps import get_current_active_user
 
 router = APIRouter()
 
@@ -23,7 +21,6 @@ router = APIRouter()
 @router.get("/{user_id}/assessment/available", response_model=List[AvailableAssessmentResponse])
 async def get_available_assessments(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -31,12 +28,6 @@ async def get_available_assessments(
     
     Returns all active assessments that the student can take
     """
-    # Check if user is trying to access their own assessments
-    if current_user.user_id != user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only access your own assessments"
-        )
     
     try:
         # Verify student exists
@@ -74,7 +65,6 @@ async def get_available_assessments(
 async def start_assessment(
     user_id: str,
     assessment_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -142,7 +132,6 @@ async def submit_assessment(
     user_id: str,
     assessment_id: str,
     submission_data: AssessmentSubmitRequest,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -205,7 +194,6 @@ async def submit_assessment(
 async def get_assessment_report(
     user_id: str,
     submission_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -268,7 +256,6 @@ async def get_assessment_report(
 @router.get("/{user_id}/assessment/history", response_model=List[StudentAssessmentHistoryResponse])
 async def get_assessment_history(
     user_id: str,
-    current_user: TokenData = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     """

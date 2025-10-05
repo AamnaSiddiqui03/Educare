@@ -1,36 +1,103 @@
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
+from app.data.models import Gender, ParentLiveStatus, ApplicantType
 
 
 # Student Profile Schemas
 class StudentProfileCreate(BaseModel):
     """Schema for creating student profile"""
+    # Basic Profile Information
     phone: str
     address: str
     photo_url: Optional[str] = None
     video_url: Optional[str] = None
     help_text: str
+    
+    # Personal Information
+    gender: Optional[Gender] = None
+    age: Optional[int] = None
+    
+    # Parent/Guardian Information
+    parent_guardian_occupation: Optional[str] = None
+    parent_guardian_monthly_income: Optional[int] = None
+    parents_education_status: Optional[str] = None
+    parent_live_status: Optional[ParentLiveStatus] = None
+    
+    # Scholarship Information
+    scholarship_amount_requested: Optional[int] = None
+    is_eligible_for_zakat: Optional[bool] = None
+    
+    # Applicant Information
+    applicant_email: Optional[str] = None
+    applicant_type: Optional[ApplicantType] = None
+    applicant_name: Optional[str] = None
+    applicant_mobile_number: Optional[str] = None
 
 
 class StudentProfileUpdate(BaseModel):
     """Schema for updating student profile"""
+    # Basic Profile Information
     phone: Optional[str] = None
     address: Optional[str] = None
     photo_url: Optional[str] = None
     video_url: Optional[str] = None
     help_text: Optional[str] = None
+    
+    # Personal Information
+    gender: Optional[Gender] = None
+    age: Optional[int] = None
+    
+    # Parent/Guardian Information
+    parent_guardian_occupation: Optional[str] = None
+    parent_guardian_monthly_income: Optional[int] = None
+    parents_education_status: Optional[str] = None
+    parent_live_status: Optional[ParentLiveStatus] = None
+    
+    # Scholarship Information
+    scholarship_amount_requested: Optional[int] = None
+    is_eligible_for_zakat: Optional[bool] = None
+    
+    # Applicant Information
+    applicant_email: Optional[str] = None
+    applicant_type: Optional[ApplicantType] = None
+    applicant_name: Optional[str] = None
+    applicant_mobile_number: Optional[str] = None
 
 
 class StudentProfileResponse(BaseModel):
     """Schema for student profile response"""
     student_id: str
     user_id: str
+    
+    # Basic Profile Information
     phone: str
     address: str
     photo_url: Optional[str]
     video_url: Optional[str]
     help_text: str
+    
+    # Personal Information
+    gender: Optional[Gender]
+    age: Optional[int]
+    
+    # Parent/Guardian Information
+    parent_guardian_occupation: Optional[str]
+    parent_guardian_monthly_income: Optional[int]
+    parents_education_status: Optional[str]
+    parent_live_status: Optional[ParentLiveStatus]
+    
+    # Scholarship Information
+    scholarship_amount_requested: Optional[int]
+    is_eligible_for_zakat: Optional[bool]
+    
+    # Applicant Information
+    applicant_email: Optional[str]
+    applicant_type: Optional[ApplicantType]
+    applicant_name: Optional[str]
+    applicant_mobile_number: Optional[str]
+    
+    # Status Fields
     profile_completed: bool
     assessment_completed: bool
     created_at: str
