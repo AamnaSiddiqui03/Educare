@@ -184,12 +184,7 @@ Authorization: Bearer <access_token>
 ### Create Student Profile
 **POST** `/students/{user_id}/profile`
 
-Create a student profile for the authenticated user.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Create a student profile. **No authentication required.**
 
 **Request Body:**
 ```json
@@ -253,19 +248,14 @@ Authorization: Bearer <access_token>
 
 **Error Responses:**
 - `400 Bad Request` - Profile already exists
-- `403 Forbidden` - Not authorized to create profile for this user
+- `500 Internal Server Error` - Server error during profile creation
 
 ---
 
 ### Get Student Profile
 **GET** `/students/{user_id}/profile`
 
-Get the student profile for the authenticated user.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Get the student profile. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -277,6 +267,18 @@ Authorization: Bearer <access_token>
   "photo_url": "https://example.com/photo.jpg",
   "video_url": "https://example.com/video.mp4",
   "help_text": "I need help with career guidance and academic support.",
+  "gender": "male",
+  "age": 20,
+  "parent_guardian_occupation": "Teacher",
+  "parent_guardian_monthly_income": 25000,
+  "parents_education_status": "Graduate",
+  "parent_live_status": "both",
+  "scholarship_amount_requested": 50000,
+  "is_eligible_for_zakat": true,
+  "applicant_email": "parent@example.com",
+  "applicant_type": "parent",
+  "applicant_name": "John Doe Sr.",
+  "applicant_mobile_number": "9876543210",
   "profile_completed": false,
   "assessment_completed": false,
   "created_at": "2025-01-04T12:00:00Z",
@@ -292,12 +294,7 @@ Authorization: Bearer <access_token>
 ### Update Student Profile
 **PUT** `/students/{user_id}/profile`
 
-Update the student profile. All fields are optional.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Update the student profile. All fields are optional. **No authentication required.**
 
 **Request Body:**
 ```json
@@ -330,12 +327,7 @@ Authorization: Bearer <access_token>
 ### Submit Student Profile
 **POST** `/students/{user_id}/profile/submit`
 
-Mark the student profile as completed.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Mark the student profile as completed. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -350,12 +342,7 @@ Authorization: Bearer <access_token>
 ### Get Student Progress
 **GET** `/students/{user_id}/profile/progress`
 
-Get the student's progress status.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Get the student's progress status. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -373,12 +360,7 @@ Authorization: Bearer <access_token>
 ### Add Education Entry
 **POST** `/students/{user_id}/education`
 
-Add an education entry for the student.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Add an education entry for the student. **No authentication required.**
 
 **Request Body:**
 ```json
@@ -411,12 +393,7 @@ Authorization: Bearer <access_token>
 ### Get Education Entries
 **GET** `/students/{user_id}/education`
 
-Get all education entries for the student.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Get all education entries for the student. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -440,12 +417,7 @@ Authorization: Bearer <access_token>
 ### Get Education Entry by ID
 **GET** `/students/{user_id}/education/{education_id}`
 
-Get a specific education entry.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Get a specific education entry. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -467,12 +439,7 @@ Authorization: Bearer <access_token>
 ### Update Education Entry
 **PUT** `/students/{user_id}/education/{education_id}`
 
-Update an education entry. All fields are optional.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Update an education entry. All fields are optional. **No authentication required.**
 
 **Request Body:**
 ```json
@@ -502,12 +469,7 @@ Authorization: Bearer <access_token>
 ### Delete Education Entry
 **DELETE** `/students/{user_id}/education/{education_id}`
 
-Delete an education entry.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Delete an education entry. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -523,12 +485,7 @@ Authorization: Bearer <access_token>
 ### Get Available Assessments
 **GET** `/students/{user_id}/assessment/available`
 
-Get list of available assessments for the student.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Get list of available assessments for the student. **No authentication required.**
 
 **Response (200 OK):**
 ```json
@@ -549,12 +506,7 @@ Authorization: Bearer <access_token>
 ### Start Assessment
 **GET** `/students/{user_id}/assessment/start/{assessment_id}`
 
-Start an assessment and get questions.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
+Start an assessment and get questions. **No authentication required.**
 
 **Response (200 OK):**
 ```json

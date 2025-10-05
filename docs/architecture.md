@@ -46,12 +46,48 @@ created_at	Timestamp	Entry creation date
 updated_at	Timestamp	Last update date
 
 
-StudentAssessment Table
+Updated StudentAssessment Table
+Column	Type	Description
+student_assessment_id	UUID	Primary Key
+student_id	UUID	FK to Students table
+assessment_id	UUID	FK to AssessmentMaster table
+score	Float	Optional numeric score
+report_pdf_url	String	Link to generated PDF report
+submitted_at	Timestamp	Submission timestamp
 
-Stores PDF report only (no JSON needed for now).
+Logic:
+
+A student can have multiple rows for the same assessment_id.
+
+To get the current/latest submission for a test:
+
+SELECT * 
+FROM StudentAssessment
+WHERE student_id = :student_id AND assessment_id = :assessment_id
+ORDER BY submitted_at DESC
+LIMIT 1;
+
+API Adjustments
+Endpoint	Method	Description	Notes
+/students/:id/assessments/:assessment_id/submit	POST	Submit test → generate PDF → create new row	No overwrite; backend stores multiple submissions
+/students/:id/assessments/:assessment_id/latest	GET	Fetch latest submission for a test	Used for profile score/visibility
+/students/:id/assessments/:assessment_id/history	GET	Fetch all past submissions	Optional for student review
+Test Refresh Logic
+
+You can add a column in AssessmentMaster:
 
 Column	Type	Description
-assessment_id	UUID	Primary Key
-student_id	UUID	FK to Students table
-report_pdf_url	String	Link to generated PDF assessment report
-submitted_at	Timestamp	Assessment submission timestamp
+refresh_interval_days	Integer	After how many days the test becomes available again for reattempt
+
+Backend can calculate availability:
+
+last_submission = get_last_submission(student_id, assessment_id)
+if today - last_submission.submitted_at >= refresh_interval_days:
+    allow_test = True
+else:
+    allow_test = False
+
+
+Frontend shows “Reattempt available in X days” if test is not yet refreshed.
+
+This way you keep historical data, support weekly refresh, and only latest submission counts for assessment completion or reporting.
